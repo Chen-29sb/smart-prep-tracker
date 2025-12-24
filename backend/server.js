@@ -2,18 +2,17 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
+
+
 dotenv.config();
+connectDB();
 
 const app = express();
-
-connectDB();
 
 // Middleware to parse JSON
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Server is running");
-});
+app.use("/api/auth", require("./routes/authRoutes"));
 
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Server is running fine 🚀" });
