@@ -13,6 +13,8 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
+
 
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Server is running fine 🚀" });
