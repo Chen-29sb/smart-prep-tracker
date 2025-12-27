@@ -4,6 +4,7 @@ const connectDB = require("./config/db");
 
 
 
+
 dotenv.config();
 connectDB();
 
@@ -14,6 +15,8 @@ app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/problems", require("./routes/problemRoutes"));
+
 
 
 app.get("/health", (req, res) => {
