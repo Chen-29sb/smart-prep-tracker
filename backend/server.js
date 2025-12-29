@@ -29,6 +29,7 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
+const { errorHandler } = require("./middleware/errorMiddleware");
 
-
-
+// Error Middleware (must be last)
+app.use(errorHandler);

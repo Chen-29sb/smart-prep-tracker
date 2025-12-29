@@ -29,6 +29,10 @@ const createProblem = async (req, res) => {
 // @access  Private
 const getProblems = async (req, res) => {
   try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+
     const filter = { user: req.user._id };
 
     if (req.query.topic) {
@@ -39,11 +43,19 @@ const getProblems = async (req, res) => {
       filter.difficulty = req.query.difficulty;
     }
 
-    const problems = await Problem.find(filter).sort({
-      createdAt: -1,    
-    });
+    const total = await Problem.countDocuments(filter);
 
-    res.status(200).json(problems);
+    const problems = await Problem.find(filter)
+    .sort({createdAt: -1})
+    .skip(skip)
+    .limit(limit);
+
+    res.status(200).json({
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+      problems,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
