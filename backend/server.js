@@ -1,7 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-
+const { errorHandler } = require("./middleware/errorMiddleware");
+const cors = require("cors");
 
 
 
@@ -9,6 +10,9 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+app.use(cors());
+
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -28,8 +32,6 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-const { errorHandler } = require("./middleware/errorMiddleware");
 
 // Error Middleware (must be last)
 app.use(errorHandler);

@@ -20,7 +20,7 @@ const createProblem = async (req, res) => {
 
     res.status(201).json(problem);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    throw new Error("Server error");
   }
 };
 
@@ -57,7 +57,7 @@ const getProblems = async (req, res) => {
       problems,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    throw new Error("Server error");
   }
 };
 
@@ -84,7 +84,7 @@ const updateProblem = async (req, res) => {
 
     res.status(200).json(updatedProblem);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    throw new Error("Server error");
   }
 };
 
@@ -109,7 +109,7 @@ const deleteProblem = async (req, res) => {
 
     res.status(200).json({ message: "Problem removed" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    throw new Error("Server error");
   }
 };
 
