@@ -5,6 +5,14 @@ import API from "../services/api";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [problems, setProblems] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+
+  const [filters, setFilters] = useState({
+    topic: "",
+    difficulty: "",
+  });
+
   const [formData, setFormData] = useState({
     title: "",
     topic: "",
@@ -13,8 +21,17 @@ const Dashboard = () => {
 
   const fetchProblems = async () => {
     try {
-      const res = await API.get("/problems");
-      setProblems(res.data.problems || res.data);
+      const res = await API.get("/problems", {
+        params: {
+          page,
+          limit: 5,
+          topic: filters.topic || undefined,
+          difficulty: filters.difficulty || undefined,
+        },
+      });
+
+      setProblems(res.data.problems);
+      setPages(res.data.pages);
     } catch (error) {
       alert("Failed to fetch problems");
     }
@@ -22,7 +39,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchProblems();
-  }, []);
+  }, [page, filters]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -95,6 +112,44 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* Filters */}
+      <div className="bg-white p-4 rounded shadow mb-6 flex gap-4">
+      <input
+        type="text"
+        placeholder="Filter by topic"
+        className="border p-2 flex-1"
+        value={filters.topic}
+        onChange={(e) =>
+          setFilters({ ...filters, topic: e.target.value })
+        }
+      />
+
+      <select
+      className="border p-2"
+      value={filters.difficulty}
+      onChange={(e) =>
+       setFilters({ ...filters, difficulty: e.target.value })
+      }
+      >
+        <option value="">All</option>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+
+      </select>
+
+      <button
+        onClick={() => {
+          setFilters({ topic: "", difficulty: "" });
+          setPage(1);
+        }}
+        className="bg-gray-300 px-4 rounded"
+      >
+        Clear
+      </button>
+      </div>
+
+
       {/* Problems List */}
       <div className="space-y-3">
         {problems.map((problem) => (
@@ -126,7 +181,31 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
-    </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Prev
+        </button>
+
+        <span>
+          Page {page} of {pages}
+        </span>
+
+        <button
+          disabled={page === pages}
+          onClick={() => setPage(page + 1)}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+
+    </div>   
   );
 };
 
