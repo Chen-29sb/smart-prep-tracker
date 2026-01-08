@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const [problems, setProblems] = useState([]);
   const [page, setPage] = useState(1);
@@ -29,6 +31,9 @@ const Dashboard = () => {
 
   const fetchProblems = async () => {
     try {
+      setLoading(true);
+      setError("");
+
       const res = await API.get("/problems", {
         params: {
           page,
@@ -52,7 +57,9 @@ const Dashboard = () => {
       setStats({ total, solved, inProgress, notStarted });
 
     } catch (error) {
-      alert("Failed to fetch problems");
+      setError("Failed to load problems");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -148,7 +155,8 @@ const Dashboard = () => {
                 alert("Failed to add problem");
               }
             }}
-            className="bg-blue-600 text-white px-4 rounded"
+            disabled={loading}
+            className="bg-blue-600 text-white px-4 rounded disabled:opacity-50"
           >
             Add
           </button>
@@ -192,8 +200,26 @@ const Dashboard = () => {
       </button>
       </div>
 
+      {loading && (
+      <div className="text-center text-gray-500 py-6">
+        Loading problems...
+      </div>
+      )}
+
+      {error && (
+      <div className="text-center text-red-600 py-4">
+        {error}
+      </div>
+      )}
+
 
       {/* Problems List */}
+      {!loading && problems.length === 0 && (
+        <div className="text-center text-gray-500 py-6">
+           No problems found. Start by adding one 🚀
+        </div>
+      )}
+
       <div className="space-y-3">
         {problems.map((problem) => (
           <div
@@ -207,7 +233,7 @@ const Dashboard = () => {
               </p>
             </div>
 
-            <select
+            <select 
               value={problem.status}
               onChange={async (e) => {
                 await API.put(`/problems/${problem._id}`, {
@@ -215,7 +241,7 @@ const Dashboard = () => {
                 });
                 fetchProblems();
               }}
-              className="border p-2"
+              className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option>Not Started</option>
               <option>In Progress</option>
