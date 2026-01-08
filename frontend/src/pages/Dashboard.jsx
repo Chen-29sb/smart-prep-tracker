@@ -19,6 +19,14 @@ const Dashboard = () => {
     difficulty: "Easy",
   });
 
+  const [stats, setStats] = useState({
+  total: 0,
+  solved: 0,
+  inProgress: 0,
+  notStarted: 0,
+  });
+
+
   const fetchProblems = async () => {
     try {
       const res = await API.get("/problems", {
@@ -30,8 +38,19 @@ const Dashboard = () => {
         },
       });
 
-      setProblems(res.data.problems);
+      const fetchedProblems = res.data.problems;
+
+      setProblems(fetchedProblems);
       setPages(res.data.pages);
+
+      // Compute stats
+      const total = fetchedProblems.length;
+      const solved = fetchedProblems.filter(p => p.status === "Solved").length;
+      const inProgress = fetchedProblems.filter(p => p.status === "In Progress").length;
+      const notStarted = fetchedProblems.filter(p => p.status === "Not Started").length;
+
+      setStats({ total, solved, inProgress, notStarted });
+
     } catch (error) {
       alert("Failed to fetch problems");
     }
@@ -57,6 +76,30 @@ const Dashboard = () => {
           Logout
         </button>
       </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white p-4 rounded shadow text-center">
+          <h3 className="text-gray-500">Total</h3>
+          <p className="text-2xl font-bold">{stats.total}</p>
+        </div>
+
+        <div className="bg-green-100 p-4 rounded shadow text-center">
+          <h3 className="text-green-700">Solved</h3>
+          <p className="text-2xl font-bold">{stats.solved}</p>
+        </div>
+
+        <div className="bg-yellow-100 p-4 rounded shadow text-center">
+          <h3 className="text-yellow-700">In Progress</h3>
+          <p className="text-2xl font-bold">{stats.inProgress}</p>
+        </div>
+
+        <div className="bg-gray-100 p-4 rounded shadow text-center">
+          <h3 className="text-gray-700">Not Started</h3>
+          <p className="text-2xl font-bold">{stats.notStarted}</p>
+        </div>
+      </div>
+
 
       {/* Add Problem Form */}
       <div className="bg-white p-4 rounded shadow mb-6">
