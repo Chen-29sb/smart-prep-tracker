@@ -62,12 +62,12 @@ smart-prep-tracker/
 
 ## 🔹 How to Run Locally
 
-### 1️⃣ Clone Repository
+### 1️ Clone Repository
 ```bash
 git clone https://github.com/Chen-29sb/smart-prep-tracker.git
 cd smart-prep-tracker
 
-### Backend Setup
+**### 2 Backend Setup**
 
 ```bash
 cd backend
@@ -89,7 +89,7 @@ http://localhost:5000
 
 -----
 
-### Frontend Setup
+**### 3 Frontend Setup**
 
 cd frontend
 npm install
@@ -100,7 +100,7 @@ http://localhost:5173
 
 ----
 
-###API Routes
+**### 4 API Routes**
 
 Authentication
 
@@ -116,7 +116,7 @@ DELETE /api/problems/:id
 
 -----
 
-###Security Design
+**###Security Design**
 
 JWT verification handled in backend
 User ownership enforced using req.user._id
@@ -126,7 +126,7 @@ Protected UI routes using a custom ProtectedRoute
 
 -----
 
-###Key Learnings
+**###Key Learnings**
 
 Full-stack authentication flow
 Secure REST API development
@@ -138,12 +138,12 @@ Scalable project architecture
 
 -----
 
-AUTHOR - SHRISTI BHOMRAJKA
+**AUTHOR - SHRISTI BHOMRAJKA**
 
 -----
 
 ```md
-## 🔹 Screenshots
+**## 🔹 Screenshots**
 
 ### Login
 ![Login](docs/screenshots/login.png)
@@ -154,7 +154,7 @@ AUTHOR - SHRISTI BHOMRAJKA
 ### Problems
 ![Problems](docs/screenshots/problems.png)
 
-###Note
+**###Note**
 This project was built with a focus on backend correctness, security, and real-world full-stack practices rather than only UI design.
 
 
